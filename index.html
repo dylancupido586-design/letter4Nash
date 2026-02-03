@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>4Nash</title>
+
+<style>
+body {
+    margin: 0;
+    height: 100vh;
+    background: linear-gradient(135deg, #6a4c93, #f7e7ce);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Segoe UI', sans-serif;
+    overflow: hidden;
+}
+
+.envelope {
+    position: relative;
+    width: 300px;
+    height: 200px;
+    cursor: pointer;
+    perspective: 1000px;
+}
+
+.envelope-body {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: #f7e7ce;
+    border-radius: 12px;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.35);
+    z-index: 1;
+}
+
+.envelope-flap {
+    position: absolute;
+    top: 0;
+    width: 0;
+    height: 0;
+    border-left: 150px solid transparent;
+    border-right: 150px solid transparent;
+    border-bottom: 100px solid #6a4c93;
+    transform-origin: top;
+    transition: transform 1s ease;
+    z-index: 3;
+}
+
+.letter {
+    position: absolute;
+    left: 15px;
+    right: 15px;
+    bottom: 15px;
+    height: 0;
+    background: white;
+    border-radius: 10px;
+    padding: 0 20px;
+    overflow: hidden;
+    text-align: center;
+    transition: height 1s ease, padding 0.5s ease;
+    z-index: 2;
+}
+
+.envelope.open .envelope-flap {
+    transform: rotateX(180deg);
+}
+
+.envelope.open .letter {
+    height: 140px;
+    padding: 20px;
+}
+
+h2 {
+    color: #6a4c93;
+    margin: 20px 0;
+}
+
+.choices {
+    display: flex;
+    justify-content: space-around;
+}
+
+/* Buttons */
+.rose-btn {
+    background: #6a4c93;
+    color: white;
+    border: none;
+    padding: 10px 22px;
+    border-radius: 50px;
+    font-size: 16px;
+    cursor: pointer;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+
+.yes-btn::before {
+    content: "🌹 ";
+}
+
+.no-btn::before {
+    content: "🥀 ";
+}
+
+/* Confetti */
+.confetti {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    animation: fall 3s linear forwards;
+}
+
+@keyframes fall {
+    from { transform: translateY(-10px) rotate(0deg); }
+    to { transform: translateY(110vh) rotate(360deg); }
+}
+
+/* Broken heart */
+.heart {
+    position: absolute;
+    font-size: 120px;
+    animation: pop 0.8s ease forwards;
+}
+
+@keyframes pop {
+    from { transform: scale(0); }
+    to { transform: scale(1); }
+}
+</style>
+</head>
+
+<body>
+
+<div class="envelope" onclick="openEnvelope()">
+    <div class="envelope-flap"></div>
+    <div class="envelope-body"></div>
+
+    <div class="letter">
+        <h2>Will you be my Valentine? 👨🏻‍❤️‍💋‍👩🏽💜</h2>
+        <div class="choices">
+            <button class="rose-btn yes-btn" onclick="yes(event)">Yes</button>
+            <button class="rose-btn no-btn" onclick="no(event)">No</button>
+        </div>
+    </div>
+</div>
+
+<script>
+function openEnvelope() {
+    document.querySelector('.envelope').classList.add('open');
+}
+
+function yes(e) {
+    e.stopPropagation();
+    for (let i = 0; i < 90; i++) {
+        const confetti = document.createElement('div');
+        confetti.className = 'confetti';
+        confetti.style.left = Math.random() * window.innerWidth + 'px';
+        confetti.style.background =
+            ['#6a4c93', '#f7e7ce', '#ff69b4'][Math.floor(Math.random() * 3)];
+        confetti.style.animationDuration = (Math.random() * 2 + 2) + 's';
+        document.body.appendChild(confetti);
+        setTimeout(() => confetti.remove(), 3000);
+    }
+}
+
+function no(e) {
+    e.stopPropagation();
+    const heart = document.createElement('div');
+    heart.className = 'heart';
+    heart.innerHTML = '💔😔';
+    document.body.appendChild(heart);
+    setTimeout(() => heart.remove(), 2000);
+}
+</script>
+
+</body>
+</html>
